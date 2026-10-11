@@ -2,12 +2,16 @@ package com.chatop.chatop.rental;
 
 import com.chatop.chatop.user.UserEntity;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "RENTALS")
 public class RentalEntity {
@@ -36,6 +40,6 @@ public class RentalEntity {
     private LocalDateTime updatedAt;
 
     @ManyToOne()
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     private UserEntity owner;
 }
