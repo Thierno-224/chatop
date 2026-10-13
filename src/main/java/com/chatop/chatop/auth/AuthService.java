@@ -23,9 +23,7 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.email())) {
-            throw new EmailAlreadyExistsException(
-                    "Cette adresse email est déjà utilisée"
-            );
+            throw new EmailAlreadyExistsException("Essayer une autre adresse mail");
         }
 
         UserEntity user = new UserEntity();
