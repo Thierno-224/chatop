@@ -1,9 +1,10 @@
 package com.chatop.chatop.rental;
 
 import com.chatop.chatop.rental.dto.*;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +30,10 @@ public class RentalController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<MessageResponseDTO> createRental(@Valid @RequestBody
-                                                           CreateRentalRequestDTO r) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MessageResponseDTO> createRental(
+            @Valid @ModelAttribute CreateRentalRequestDTO r
+    ) {
         rentalService.createRental(r);
         return ResponseEntity.ok(new MessageResponseDTO("Rental created !"));
     }

@@ -19,7 +19,8 @@ public record CreateRentalRequestDTO(
         @DecimalMin(value = "0.01", message = "Le prix doit être positif")
         BigDecimal price,
 
-        String picture,
+        @NotNull(message = "L'image est obligatoire")
+        MultipartFile picture,
 
         @NotBlank(message = "La description est obligatoire")
         @Size(max = 2000, message = "La description ne doit pas dépasser 2000 caractères")

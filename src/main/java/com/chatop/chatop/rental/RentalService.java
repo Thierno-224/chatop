@@ -3,6 +3,7 @@ package com.chatop.chatop.rental;
 import com.chatop.chatop.exception.InvalidCredentialsException;
 import com.chatop.chatop.exception.NotFoundException;
 import com.chatop.chatop.rental.dto.*;
+import com.chatop.chatop.storage.ImageStorageService;
 import com.chatop.chatop.user.UserEntity;
 import com.chatop.chatop.user.UserRepository;
 import jakarta.validation.Valid;
@@ -18,6 +19,7 @@ import java.util.List;
 public class RentalService {
     private final RentalRepository rentalRepository;
     private final UserRepository userRepository;
+    private final ImageStorageService imageStorageService;
 
     public List<RentalResponseDTO> getAllRentals() {
         return rentalRepository.findAll().stream()
@@ -40,7 +42,8 @@ public class RentalService {
     }
 
 
-    public void createRental(@Valid CreateRentalRequestDTO r) {
+    public void createRental(CreateRentalRequestDTO r) {
+
         String email = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
@@ -48,15 +51,18 @@ public class RentalService {
         UserEntity owner = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Aucun utilisateur trouvé"));
 
+        String pictureUrl = imageStorageService.store(r.picture());
+
         RentalEntity rental = new RentalEntity();
 
         rental.setName(r.name());
         rental.setSurface(r.surface());
         rental.setPrice(r.price());
         rental.setDescription(r.description());
-        rental.setPicture(r.picture());
+        rental.setPicture(pictureUrl);
         rental.setCreatedAt(LocalDateTime.now());
         rental.setOwner(owner);
+
         rentalRepository.save(rental);
     }
 
